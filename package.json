@@ -1,0 +1,16 @@
+{
+    "name": "cha",
+    "preferGlobal": false,
+    "version": "0.0.1",
+    "author": "Jno Eubank <joneubank@gmail.com>",
+    "description": "Simple hashing algorithm that converts anything to a 6 character hex code",
+    "license": "The Unlicense",
+    "engines": {
+        "node": ">=0.10"
+    },
+    "scripts": {
+        "start": "node ./app.js"
+    },
+    "dependencies": {
+    }
+}
