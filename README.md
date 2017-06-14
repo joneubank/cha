@@ -1,0 +1,2 @@
+# cha
+Colour Hash Algorithm
