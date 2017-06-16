@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">  
+    <title>Colour Hash Algorithm!</title>
+    <!--[if lt IE 9]><script src="js/html5shiv-printshiv.js" media="all"></script><![endif]-->
+    <script type="text/javascript">
+        function hash (input) {
+            var PERMUTATIONS = 16777216;
+            var chars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
+
+            var output = ['0','0','0','0','0','0'];
+            var tally = 19;
+            for(var index = 0; index < output.length*2; index++) {
+
+                for (var i = 0; i < input.length; i++){
+                    var code = input.charCodeAt(i);
+                    tally += i;
+                    tally += tally << 2;
+                    tally += code;
+                    tally = tally >> 1;
+                    tally += code * 3;
+                    tally = tally >> 1;
+
+                    char_index = (input.charCodeAt(i)+tally)%chars.length;
+                    while (char_index < 0) {
+                        char_index += chars.length;
+                    }
+                    output[tally%output.length] = chars[char_index];
+                }
+            }
+
+            return output.toString().replace(new RegExp(',', 'g'),'');
+        }
+
+        function invertColor(hexTripletColor) {
+            var color = parseInt(hexTripletColor, 16); // convert to integer
+            color = 0xFFFFFF ^ color; // invert three bytes
+            color = color.toString(16); // convert to hex
+            color = ("000000" + color).slice(-6); // pad with leading zeros
+            return color;
+        }
+
+        var urlParams;
+        (window.onpopstate = function () {
+            var match,
+                pl     = /\+/g,  // Regex for replacing addition symbol with a space
+                search = /([^&=]+)=?([^&]*)/g,
+                decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+                query  = window.location.search.substring(1);
+
+            urlParams = {};
+            while (match = search.exec(query))
+            urlParams[decode(match[1])] = decode(match[2]);
+        })();
+    
+    </script>
+    <style>
+        *:focus {
+            outline: none;
+        }
+        #wrapper{
+            height:100vh;
+        }
+        #content {
+            position: fixed; /* or absolute */
+            top: 50%;
+            left: 50%;
+            /* bring your own prefixes */
+            transform: translate(-50%, -50%);
+        }
+        #hashinput {
+            width: 100%;
+            border: 0;
+            text-align: center;
+            font-size: 5em;
+            font-weight: bold;
+
+        }
+        #colourcode {
+            text-align: center;
+            padding: 1em 0;
+            font-size: 2em;
+
+        }
+
+    </style>
+
+</head>
+<body>
+    <div id="wrapper">
+        <div id="content">
+            <form>
+                <input id="hashinput" type="text" name="hashinput" autocomplete="off"/>
+            </form>
+            <div id="colourcode"></div>
+        </div>
+    </div>
+
+    <script>
+        var hashinput = document.getElementById("hashinput");
+        var colourcode = document.getElementById("colourcode");
+        var body = document.getElementsByTagName('body')[0];
+
+        function onInputEvent() {
+            var hashColor = hash(hashinput.value);
+            var invertedColor = invertColor(hashColor);
+            console.log(hashinput.value + ' : ' + hashColor + ' : ' + invertedColor);
+            body.setAttribute("style", "background-color:#"+hashColor);
+            hashinput.setAttribute("style", "background-color:#"+hashColor+";color:#"+invertedColor);
+
+            if (hashinput.value) {
+                //Only if there is a value entered
+                colourcode.innerHTML = "#"+hashColor;
+                colourcode.setAttribute("style", "color:#"+invertedColor);
+            } else {
+                colourcode.innerHTML = "";
+            }
+        }
+
+        function onClickAnywhere() {
+            hashinput.focus();
+        }
+
+        
+        hashinput.value = urlParams.hashinput ? urlParams.hashinput : 'joneubank';
+        onInputEvent();
+        hashinput.focus();
+
+        hashinput.addEventListener('input', onInputEvent);
+        document.addEventListener('click', onClickAnywhere);
+    </script>
+</body>
+</html>
