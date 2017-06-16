@@ -1,4 +1,4 @@
-#Colour Hash Algorithm (CHA)
+# Colour Hash Algorithm (CHA)
 
 Quick and dirty attempt to make a hash algorithm that converts any string into a 6 character hexadecimal string. Theres nothing fancy about the alogirthm itself, but attempts were made to have it achieve the make the algorithm generate noticeably different but similar outputs for strings that differ by a single character or single bit.
 
